@@ -79,7 +79,7 @@ export async function publish() {
       // Our contract depends on the token-minter contract to provide some common functionalities like managing refs and mint stages
       // You can read the source code of it here: https://github.com/aptos-labs/token-minter/
       // Please find it on the network you are using, This is testnet deployment
-      minter: tokenMinterContractAddress,
+      minter: AccountAddress.fromString(tokenMinterContractAddress),
     },
     extraArguments: [
       `--private-key=${process.env.MODULE_PUBLISHER_ACCOUNT_PRIVATE_KEY}`,
