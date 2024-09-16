@@ -2,13 +2,11 @@
   "name": "coc-management-server",
   "version": "1.0.0",
   "description": "",
-  "main": "./dist/app.js",
-  "type": "module",
+  "main": "./dist/index.js",
   "scripts": {
-    "build": "rimraf dist && tsc && cp -r contract dist/contract",
-    "dev": "npm run build && nodemon app.js",
-    "add-build": "git add dist",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build:server": "npm install -g @aptos-labs/aptos-cli --force && rm -rf node_modules",
+    "build": "rm -rf dist && tsc",
+    "dev": "npm run build && nodemon index.js"
   },
   "keywords": [],
   "author": "",
@@ -23,8 +21,6 @@
   "devDependencies": {
     "@types/express": "^4.17.21",
     "nodemon": "^2.0.22",
-    "pre-commit": "^1.2.2",
-    "rimraf": "^6.0.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.6.2"
   }

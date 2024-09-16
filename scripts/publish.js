@@ -1,19 +1,12 @@
-import fs from "node:fs";
+const fs = require("node:fs");
+const cli = require("@aptos-labs/ts-sdk/dist/common/cli/index.js");
+const aptosSDK = require("@aptos-labs/ts-sdk");
 
-import {
-  AptosConfig,
-  Aptos,
-  Network,
-  NetworkToNodeAPI,
-  AccountAddress,
-} from "@aptos-labs/ts-sdk";
-import { Move } from "@aptos-labs/ts-sdk/dist/common/cli/index.js";
-
-export async function publish() {
-  const aptosConfig = new AptosConfig({
-    network: process.env.APP_NETWORK as Network,
+async function publish() {
+  const aptosConfig = new aptosSDK.AptosConfig({
+    network: process.env.APP_NETWORK,
   });
-  const aptos = new Aptos(aptosConfig);
+  const aptos = new aptosSDK.Aptos(aptosConfig);
 
   // Make sure COLLECTION_CREATOR_ADDRESS is set
   if (!process.env.COLLECTION_CREATOR_ADDRESS) {
@@ -62,7 +55,7 @@ export async function publish() {
       );
   }
   console.log("tokenMinterContractAddress", tokenMinterContractAddress);
-  const move = new Move();
+  const move = new cli.Move();
 
   console.log("calls createObjectAndPublishPackage....");
   const response = await move.createObjectAndPublishPackage({
@@ -70,21 +63,21 @@ export async function publish() {
     addressName: "launchpad_addr",
     namedAddresses: {
       // Publish module to new object, but since we create the object on the fly, we fill in the publisher's account address here
-      launchpad_addr: AccountAddress.fromString(
-        process.env.MODULE_PUBLISHER_ACCOUNT_ADDRESS!
+      launchpad_addr: aptosSDK.AccountAddress.fromString(
+        process.env.MODULE_PUBLISHER_ACCOUNT_ADDRESS
       ),
       // This is the address you want to use to create collection with, e.g. an address in Petra so you can create collection in UI using Petra
-      initial_creator_addr: AccountAddress.fromString(
-        process.env.COLLECTION_CREATOR_ADDRESS!
+      initial_creator_addr: aptosSDK.AccountAddress.fromString(
+        process.env.COLLECTION_CREATOR_ADDRESS
       ),
       // Our contract depends on the token-minter contract to provide some common functionalities like managing refs and mint stages
       // You can read the source code of it here: https://github.com/aptos-labs/token-minter/
       // Please find it on the network you are using, This is testnet deployment
-      minter: AccountAddress.fromString(tokenMinterContractAddress),
+      minter: aptosSDK.AccountAddress.fromString(tokenMinterContractAddress),
     },
     extraArguments: [
       `--private-key=${process.env.MODULE_PUBLISHER_ACCOUNT_PRIVATE_KEY}`,
-      `--url=${NetworkToNodeAPI[process.env.APP_NETWORK!]}`,
+      `--url=${aptosSDK.NetworkToNodeAPI[process.env.APP_NETWORK]}`,
       "--assume-yes",
       "--skip-fetch-latest-git-deps",
     ],
@@ -119,3 +112,5 @@ export async function publish() {
   // Write the updated content back to the .env file
   fs.writeFileSync(filePath, envContent, "utf8");
 }
+
+module.exports = { publish };
