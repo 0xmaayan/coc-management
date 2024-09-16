@@ -37,7 +37,9 @@ export async function publish() {
         default:
             throw new Error(`Invalid network used. Make sure process.env.APP_NETWORK is either mainnet or testnet`);
     }
+    console.log("tokenMinterContractAddress", tokenMinterContractAddress);
     const move = new Move();
+    console.log("calls createObjectAndPublishPackage....");
     const response = await move.createObjectAndPublishPackage({
         packageDirectoryPath: "contract",
         addressName: "launchpad_addr",
@@ -53,8 +55,10 @@ export async function publish() {
             "--skip-fetch-latest-git-deps",
         ],
     });
+    console.log("finish createObjectAndPublishPackage....");
     const filePath = ".env";
     let envContent = "";
+    console.log(`trying write to .env file the module address ${response.objectAddress}`, filePath);
     if (fs.existsSync(filePath)) {
         envContent = fs.readFileSync(filePath, "utf8");
     }

@@ -5,7 +5,7 @@
   "main": "./dist/app.js",
   "type": "module",
   "scripts": {
-    "build": "rimraf dist && tsc",
+    "build": "rimraf dist && tsc && cp -r contract dist/contract",
     "dev": "npm run build && nodemon app.js",
     "add-build": "git add dist",
     "test": "echo \"Error: no test specified\" && exit 1"
