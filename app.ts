@@ -11,9 +11,9 @@ dotenv.config();
 https: app.get("/", async (req, res) => {
   res.send("Hello World!");
 
-  console.log("starting....");
-  await publish();
-  console.log("finished.");
+  // console.log("starting....");
+  // await publish();
+  // console.log("finished.");
 });
 
 app.listen(port, () => {
