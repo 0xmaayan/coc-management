@@ -9,9 +9,9 @@ const port = 3000;
 dotenv.config();
 
 https: app.get("/", async (req, res) => {
-  console.log("starting....");
+  console.log("starting module publishing....");
   await publish();
-  console.log("finished.");
+  console.log("finished module publishing.");
 
   res.send("Hello World!");
 });
